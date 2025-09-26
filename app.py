@@ -1,6 +1,7 @@
 import os
 from flask import Flask, request, jsonify
 import logging
+from service import is_allowed_file
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
@@ -18,13 +19,17 @@ def upload_file():
 
     if "file" not in request.files:
         logger.warning("There was no file uploaded.")
-        return jsonify({"error": "No file uploaded"}), 400
+        return jsonify({"error": "No file uploaded."}), 400
     
     file = request.files["file"]
 
     if file.filename == "":
-        logger.warning("No file name found")
-        return jsonify({"error": "File not found"}), 400
+        logger.warning("No file name found.")
+        return jsonify({"error": "File not found."}), 400
+    
+    if not is_allowed_file(file.filename):
+        logger.warning("File type is not accepted.")
+        return jsonify({"error": "File type is not accepted. Only .txt and .csv files can be uploaded."}) 
     
     logger.info(f"File '{file.filename}' was uploaded successfully.")
     return jsonify({
