@@ -29,7 +29,7 @@ def upload_file():
     
     if not is_allowed_file(file.filename):
         logger.warning("File type is not accepted.")
-        return jsonify({"error": "File type is not accepted. Only .txt and .csv files can be uploaded."}) 
+        return jsonify({"error": "File type is not accepted. Only .txt and .csv files can be uploaded."}), 400
     
     logger.info(f"File '{file.filename}' was uploaded successfully.")
     return jsonify({
