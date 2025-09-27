@@ -1,2 +1,6 @@
 venv/
-file.txt
+*.txt
+*.csv
+__pycache__/
+*.pyc
+.vscode/
