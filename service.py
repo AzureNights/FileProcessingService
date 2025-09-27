@@ -10,11 +10,27 @@ def is_allowed_file(filename):
     logger.info("Service: Validating file extension.")
     
     if "." not in filename:
-        logger.info(f"There is no extension detected.")
+        logger.info(f"Service: There is no extension detected.")
         return False
     
     file_extension = pathlib.Path(filename).suffix.lower()
     result = file_extension in ALLOWED_EXTENSIONS
 
-    logger.info(f"File {filename} is a {file_extension} file.")
+    logger.info(f"Service: File {filename} is a {file_extension} file.")
     return result
+
+def process_file(file_content):
+    logger.info("Service: Starting file processing.")
+    
+    
+    lines = file_content.splitlines()
+    num_lines = len(lines)
+    logger.info("Service: Number of lines determined.")
+
+    num_words = 0
+    for line in lines:
+        words_per_line = line.split()
+        num_words += len(words_per_line)
+    logger.info("Service: Number of words determined.")
+
+    return num_lines, num_words
