@@ -1,12 +1,15 @@
 import os
 from flask import Flask, request, jsonify
 import logging
-from service import is_allowed_file, process_file
+from service import is_allowed_file, process_file, save_to_database
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
+
+IN_MEMORY_DB = {}
+id_count = 0
 
 @app.route("/")
 def check():
@@ -15,6 +18,7 @@ def check():
 
 @app.route("/upload-file", methods=["POST"])
 def upload_file():
+    global id_count
     logger.info("App: Upload file function is running.")
 
     if "file" not in request.files:
@@ -38,10 +42,22 @@ def upload_file():
         num_lines, num_words = process_file(file_content) 
         logger.info(f"App: File '{file.filename}' was processed. Line count is {num_lines} and word count is {num_words}.")
 
+        id_count += 1
+        data = {
+            "filename": file.filename,
+            "num_of_lines": num_lines,
+            "num_of_words": num_words,
+            "status": "processed"
+        }
+
+        save_to_database(id, data, IN_MEMORY_DB)
+        logger.info(f"App: Data successfully stored data for ID: {id}")
+        
     
         logger.info(f"App: File '{file.filename}' was uploaded successfully.")
         return jsonify({
             "message": "File uploaded successfully!",
+            "id": id_count,
             "filename": file.filename,
             "num_of_lines": num_lines,
             "num_of_words": num_words 
