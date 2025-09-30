@@ -6,6 +6,7 @@ logger = logging.getLogger(__name__)
 
 ALLOWED_EXTENSIONS = {".txt", ".csv"}
 
+# File extension check function 
 def is_allowed_file(filename):
     logger.info("Service: Starting file extension validation.")
     
@@ -19,6 +20,7 @@ def is_allowed_file(filename):
     logger.info(f"Service: File {filename} is a {file_extension} file.")
     return result
 
+# Process file function 
 def process_file(file_content):
     logger.info("Service: Starting file processing.")
     
@@ -35,6 +37,7 @@ def process_file(file_content):
 
     return num_lines, num_words
 
+# Save to DB function 
 def save_to_database(id, data, db):
     logger.info("Service: Starting saving to database.")
 
